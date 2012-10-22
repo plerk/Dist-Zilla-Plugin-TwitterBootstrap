@@ -1,0 +1,30 @@
+=pod
+
+=head1 NAME
+
+Dist::Zilla::Plugin::TwitterBootstrap - Include a customized Twitter Bootstrap in your distribution
+
+=head1 VERSION
+
+version 0.1
+
+=head1 CLASS METHODS
+
+=head2 Dist::Zilla::Plugin::TwitterBootstrap->default_customization
+
+Prints to standard out the default customization as found on the Twitter
+Bootstrap website.  You can use this by appending it to your C<dist.ini>.
+
+ % perl -MDist::Zilla::Plugin::TwitterBootstrap -E 'Dist::Zilla::Plugin::TwitterBootstrap->default_customization' > dist.ini
+
+=head1 AUTHOR
+
+Graham Ollis <plicease@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2012 by Graham Ollis.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
