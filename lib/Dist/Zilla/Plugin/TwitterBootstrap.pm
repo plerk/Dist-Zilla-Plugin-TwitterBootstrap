@@ -18,7 +18,9 @@ use Template::Provider::FromDATA;
 Prints to standard out the default customization as found on the Twitter
 Bootstrap website.  You can use this by appending it to your C<dist.ini>.
 
- % perl -MDist::Zilla::Plugin::TwitterBootstrap -E 'Dist::Zilla::Plugin::TwitterBootstrap->default_customization' > dist.ini
+ % perl -MDist::Zilla::Plugin::TwitterBootstrap \
+   -E 'Dist::Zilla::Plugin::TwitterBootstrap->default_customization' \
+   > dist.ini
 
 =cut
 
