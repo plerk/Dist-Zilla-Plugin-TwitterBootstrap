@@ -26,9 +26,13 @@ Bootstrap website.  You can use this by appending it to your C<dist.ini>.
 
 sub default_customization
 {
-  my $tt2 = Template->new(
-    LOAD_TEMPLATES => [ Template::Provider::FromDATA->new( { CLASSES => __PACKAGE__ }) ],
-  );
+  state $tt2;
+  unless(defined $tt2)
+  {
+    $tt2 = Template->new(
+      LOAD_TEMPLATES => [ Template::Provider::FromDATA->new( { CLASSES => __PACKAGE__ }) ],
+    );
+  }
   $tt2->process('dist_ini', {
     dl => WebService::TwitterBootstrap::Download::Custom->new->fetch_defaults,
   });

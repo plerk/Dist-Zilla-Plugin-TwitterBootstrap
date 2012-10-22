@@ -6,7 +6,7 @@ Dist::Zilla::Plugin::TwitterBootstrap - Include a customized Twitter Bootstrap i
 
 =head1 VERSION
 
-version 0.1
+version 0.01
 
 =head1 CLASS METHODS
 
