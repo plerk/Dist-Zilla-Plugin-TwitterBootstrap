@@ -118,7 +118,10 @@ has img_exclude => (
 
 =head2 vars
 
-Which variables to override.
+Which variables to override.  For example to set @linkColor to red:
+
+ [TwitterBootstrap]
+ vars = @linkColor = #f00
 
 =cut
 

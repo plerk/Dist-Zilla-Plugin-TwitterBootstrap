@@ -60,7 +60,10 @@ otherwise have been included with just the C<img_include> attribute.
 
 =head2 vars
 
-Which variables to override.
+Which variables to override.  For example to set @linkColor to red:
+
+ [TwitterBootstrap]
+ vars = @linkColor = #f00
 
 =head2 dir
 
