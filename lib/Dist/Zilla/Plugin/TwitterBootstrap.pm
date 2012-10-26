@@ -8,6 +8,9 @@ use WebService::TwitterBootstrap::Download::Custom;
 use Template;
 use Template::Provider::FromDATA;
 use Moose::Util::TypeConstraints qw( enum );
+use List::MoreUtils qw( uniq any );
+use Text::Glob qw( match_glob );
+use Path::Class qw( file );
 
 with 'Dist::Zilla::Role::FileGatherer';
 with 'Dist::Zilla::Role::Plugin';
@@ -217,9 +220,66 @@ specified by the configuration.
 
 =cut
 
+sub _zip
+{
+  my($self) = @_;
+  my $dl = WebService::TwitterBootstrap::Download::Custom
+    ->new( cache => $self->cache )->fetch_defaults;
+  
+  @{ $dl->js } = grep { my $item = $_; ! any { $item eq $_ } @{ $self->js_exclude} } 
+                 map { match_glob($_, @{ $dl->js } ) } @{ $self->js_include };
+  
+  @{ $dl->css } = grep { my $item = $_; ! any { $item eq $_ } @{ $self->css_exclude} } 
+                 map { match_glob($_, @{ $dl->css } ) } @{ $self->css_include };
+
+  @{ $dl->img } = grep { my $item = $_; ! any { $item eq $_ } @{ $self->img_exclude} } 
+                 map { match_glob($_, @{ $dl->img } ) } @{ $self->img_include };
+  
+  %{ $dl->vars }   = ();
+  
+  foreach my $var (@{ $self->vars })
+  {
+    if($var =~ /^(.*?)=(.*)$/)
+    {
+      my $name = $1;
+      my $value = $2;
+      for($name,$value) {
+        s/^\s+//;
+        s/\s+$//;
+      }
+      $dl->vars->{$name} = $value;
+    }
+  }
+  
+  $dl->download;
+}
+
 sub gather_files
 {
   my($self, $arg) = @_;
+  
+  my $zip = $self->_zip;
+  
+  foreach my $member_name (@{ $zip->member_names })
+  {
+    $self->log("adding " . $member_name . " to " . $self->dir );
+    if($self->location eq 'build')
+    {
+      $self->add_file(
+        Dist::Zilla::File::InMemory->new(
+          content => $zip->member_content($member_name),
+          name    => Path::Class::Dir->new( $self->dir )->file( $member_name )->stringify,
+        ),
+      );
+    }
+    else
+    {
+      my $file = $self->zilla->root->file( $self->dir, $member_name );
+      $file->parent->mkpath(0, 0755);
+      $file->spew( $zip->member_content($member_name) );
+    }
+  }
+  
   return;
 }
 
