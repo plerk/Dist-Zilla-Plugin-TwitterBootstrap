@@ -47,7 +47,7 @@ that would otherwise have been included with just the C<css_include> attribute.
 =head2 img_include
 
 Which images to include.  This attribute is considered before C<img_exclude>.
-You can ues C<*> to include all available images.
+You can use C<*> to include all available images.
 
 =head2 img_exclude
 
