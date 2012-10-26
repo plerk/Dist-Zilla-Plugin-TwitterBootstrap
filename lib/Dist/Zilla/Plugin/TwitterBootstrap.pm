@@ -203,7 +203,7 @@ has cache => (
   default  => '0',
 );
 
-=head1 METHODS
+=head1 INSTANCE METHODS
 
 =head2 $plugin-E<gt>gather_files
 
