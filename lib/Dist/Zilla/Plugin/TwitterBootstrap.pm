@@ -7,9 +7,217 @@ use Moose;
 use WebService::TwitterBootstrap::Download::Custom;
 use Template;
 use Template::Provider::FromDATA;
+use Moose::Util::TypeConstraints qw( enum );
+
+with 'Dist::Zilla::Role::FileGatherer';
+with 'Dist::Zilla::Role::Plugin';
 
 # ABSTRACT: Include a customized Twitter Bootstrap in your distribution
 # VERSION
+
+=head1 SYNOPSIS
+
+ [TwitterBootstrap]
+ js_include  = *
+ css_include = *
+ img_include = *
+
+=head1 DESCRIPTION
+
+=head1 ATTRIBUTES
+
+=head2 js_include
+
+Which jQuery plugins to include.  This attribute is considered before
+C<js_exclude>.  You can use C<*> to include all available plugins.
+
+=cut
+
+has js_include => (
+  is      => 'ro',
+  isa     => 'ArrayRef[Str]',
+  default => sub { [] },  
+);
+
+=head2 js_exclude
+
+Which jQuery plugins to exclude.  This attribute will remove any plugin
+that would otherwise have been included with juts the C<js_include> attribute.
+For example, to include all plugins, EXCEPT for Transitions:
+
+ [TwitterBootstrap]
+ js_include = *
+ js_exclude = bootstrap-transition.js
+
+=cut
+
+has js_exclude => (
+  is      => 'ro',
+  isa     => 'ArrayRef[Str]',
+  default => sub { [] },
+);
+
+=head2 css_include
+
+Which CSS components to include.  This attribute is considered before
+C<css_exclude>.  You can use C<*> to include all available components.
+
+=cut
+
+has css_include => (
+  is      => 'ro',
+  isa     => 'ArrayRef[Str]',
+  default => sub { [] },  
+);
+
+=head2 css_exclude
+
+Which CSS components to exclude.  This attribute will remove any components
+that would otherwise have been included with just the C<css_include> attribute.
+
+=cut
+
+has css_exclude => (
+  is      => 'ro',
+  isa     => 'ArrayRef[Str]',
+  default => sub { [] },  
+);
+
+=head2 img_include
+
+Which images to include.  This attribute is considered before C<img_exclude>.
+You can use C<*> to include all available images.
+
+=cut
+
+has img_include => (
+  is      => 'ro',
+  isa     => 'ArrayRef[Str]',
+  default => sub { [] },  
+);
+
+=head2 img_exclude
+
+Which images to exclude.  This attribute will remove any images that would
+otherwise have been included with just the C<img_include> attribute.
+
+=cut
+
+has img_exclude => (
+  is      => 'ro',
+  isa     => 'ArrayRef[Str]',
+  default => sub { [] },  
+);
+
+=head2 vars
+
+Which variables to override.
+
+=cut
+
+has vars => (
+  is      => 'ro',
+  isa     => 'ArrayRef[Str]',
+  default => sub { [] }, 
+);
+
+=head2 dir
+
+Which directory to put jQuery into.  Defaults to public under
+the same location of your main module, so if your module is 
+Foo::Bar (lib/Foo/Bar.pm), then the default dir will be 
+lib/Foo/Bar/public.
+
+=cut
+
+has dir => (
+  is      => 'ro',
+  isa     => 'Str',
+  lazy    => 1,
+  default => sub {
+    my $self = shift;
+    my $main_module = file( $self->zilla->main_module->name );
+    (my $base = $main_module->basename) =~ s/\.pm//;
+    my $dir = $main_module->dir->subdir($base, 'public')->stringify;
+    $self->log("using default dir $dir");
+    $dir;
+  },
+);
+
+=head2 location
+
+Where to put jQuery.  Choices are:
+
+=over 4
+
+=item build
+
+This puts jQuery in the directory where the dist is currently
+being built, where it will be incorporated into the dist.
+
+=item root
+
+This puts jQuery in the root directory (The same directory
+that contains F<dist.ini>).  It will also be included in the
+built distribution.
+
+=back
+
+=cut
+
+has location => (
+  is      => 'ro',
+  isa     => enum([qw(build root)]),
+  default => 'build',
+);
+
+=head2 cache
+
+Whether and where to cache custom bootstraps.  This value is
+passed directly into the same attribute of 
+L<WebService::TwitterBootstrap::Download::Custom>, so see that
+modules documentation for details, but briefly here are the 
+values you can specify:
+
+=over 4
+
+=item * 0 (zero)
+
+Turn off caching
+
+=item * 1 (one)
+
+Turn on caching, using the default caching location.
+
+=item * directory path
+
+Use the given path as the cache directory.
+
+=back
+
+=cut
+
+has cache => (
+  is       => 'ro',
+  isa      => 'Str',
+  default  => '0',
+);
+
+=head1 METHODS
+
+=head2 $plugin-E<gt>gather_files
+
+This method downloads the appropriate files from the Internet (or
+retrieves them from the cache) and places them in the location 
+specified by the configuration.
+
+=cut
+
+sub gather_files
+{
+  my($self, $arg) = @_;
+  return;
+}
 
 =head1 CLASS METHODS
 
@@ -39,6 +247,17 @@ sub default_customization
   1;
 }
 
+=head2 Dist::Zilla::Plugin::TwitterBootstrap->mvp_multivalue_args
+
+Returns list of attributes that can be specified multiple times.  Can
+also be called as an instance method.
+
+=cut
+
+my @mvp = map { ( $_.'_include', $_.'_exclude' ) } qw( js css img );
+push @mvp, 'vars';
+sub mvp_multivalue_args { @mvp }
+
 __PACKAGE__->meta->make_immutable;
 
 1;
@@ -49,18 +268,18 @@ __dist_ini__
 [TwitterBootstrap]
 
 [% FOR js IN dl.js -%]
-js = [% js %]
+js_include = [% js %]
 [% END -%]
 
 [% FOR css IN dl.css -%]
-css = [% css %]
+css_include = [% css %]
 [% END -%]
 
 [% FOR img IN dl.img -%]
-img = [% img %]
+img_include = [% img %]
 [% END -%]
 
 ;; uncomment and change to alter from default values
 [% FOR pair IN dl.vars -%]
-; [% pair.key %] = [% pair.value %]
+; var = [% pair.key %] = [% pair.value %]
 [% END -%]

@@ -1,1 +1,6 @@
---- {}
+---
+pod_spelling_system:
+  stopwords:
+    - JavaScript
+    - dir
+    - jQuery
