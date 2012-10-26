@@ -24,6 +24,10 @@ with 'Dist::Zilla::Role::Plugin';
 
 =head1 DESCRIPTION
 
+Plugin which downloads a custom Twitter Bootstrap using 
+L<WebService::TwitterBootstrap::Download::Custom> from the Twitter 
+Bootstrap website and includes it in your distribution.
+
 =head1 ATTRIBUTES
 
 =head2 js_include
@@ -261,6 +265,21 @@ sub mvp_multivalue_args { @mvp }
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+=head1 CAVEATS
+
+If you bundle Twitter Bootstrap into your distribution, you should update the copyright
+section to include a notice that bundled copy of Twitter Bootstrap is copyright
+Twitter and is licensed under the Apache 2.0 License.
+
+This module does not bundle Twitter Bootstrap itself, but it can be used to include a
+bundled copy of Twitter Bootstrap into your Perl distribution.
+
+=head1 SEE ALSO
+
+L<WebService::TwitterBootstrap::Download::Custom>
+
+=cut
 
 __DATA__
 
