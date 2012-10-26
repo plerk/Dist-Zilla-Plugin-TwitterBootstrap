@@ -67,27 +67,28 @@ Which variables to override.  For example to set @linkColor to red:
 
 =head2 dir
 
-Which directory to put jQuery into.  Defaults to public under
-the same location of your main module, so if your module is 
-Foo::Bar (lib/Foo/Bar.pm), then the default dir will be 
-lib/Foo/Bar/public.
+Which directory to put your custom Twitter Bootstrap into.  
+Defaults to public under the same location of your main 
+module, so if your module is Foo::Bar (lib/Foo/Bar.pm), 
+then the default dir will be lib/Foo/Bar/public.
 
 =head2 location
 
-Where to put jQuery.  Choices are:
+Where to put your custom Twitter Bootstrap.  Choices are:
 
 =over 4
 
 =item build
 
-This puts jQuery in the directory where the dist is currently
-being built, where it will be incorporated into the dist.
+This puts your custom Twitter Bootstrap in the directory 
+where the dist is currently being built, where it will be 
+incorporated into the dist.
 
 =item root
 
-This puts jQuery in the root directory (The same directory
-that contains F<dist.ini>).  It will also be included in the
-built distribution.
+This puts your custom Twitter Bootstrap in the root directory 
+(The same directory that contains F<dist.ini>).  It will also 
+be included in the built distribution.
 
 =back
 
