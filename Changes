@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.02      2012-11-06 07:39:39 EST5EDT
   - fake UserAgent for tests
 
 0.01      2012-10-26 10:44:46 America/New_York
