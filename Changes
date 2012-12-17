@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.02      2012-12-16 19:35:50 America/New_York
   - fix template to use vars instead of var
 
 0.02      2012-11-06 07:39:39 EST5EDT
