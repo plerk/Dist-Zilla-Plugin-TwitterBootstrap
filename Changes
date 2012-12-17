@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - fix template to use vars instead of var
 
 0.02      2012-11-06 07:39:39 EST5EDT
   - fake UserAgent for tests

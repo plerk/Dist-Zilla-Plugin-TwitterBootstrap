@@ -364,5 +364,5 @@ img_include = [% img %]
 
 ;; uncomment and change to alter from default values
 [% FOR pair IN dl.vars -%]
-; var = [% pair.key %] = [% pair.value %]
+; vars = [% pair.key %] = [% pair.value %]
 [% END -%]
