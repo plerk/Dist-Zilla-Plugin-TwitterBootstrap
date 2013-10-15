@@ -1,0 +1,15 @@
+Config::INI::Reader
+Dist::Zilla::Role::FileGatherer
+Dist::Zilla::Role::Plugin
+ExtUtils::MakeMaker
+File::HomeDir::Test
+IO::Capture::Stdout
+List::MoreUtils
+Moose
+Moose::Util::TypeConstraints
+Path::Class
+Template
+Template::Provider::FromDATA
+Test::More
+Text::Glob
+WebService::TwitterBootstrap::Download::Custom
